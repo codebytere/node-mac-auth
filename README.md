@@ -17,16 +17,17 @@ const canPrompt = canPromptTouchID()
 console.log(`I ${canPrompt ? 'can' : 'cannot'} prompt for TouchID!`)
 ```
 
-### `promptTouchID(reason, callback)` _macOS_
+### `promptTouchID(options, callback)`
 
-* `reason` String - The reason you are asking for Touch ID authentication
+* `options` Object
+  * `reason` String - The reason you are asking for Touch ID authentication.
 * `callback` Function
   * `error` - The reason authentication failed, if it failed.
 
 ```javascript
 const { promptTouchID } = require('node-mac-auth')
 
-promptTouchID('To get consent for a Security-Gated Thing', (err) => {
+promptTouchID({ reason: 'To get consent for a Security-Gated Thing' }, (err) => {
   if (err) {
     console.log('TouchID failed because: ', err)
   } else {
@@ -34,3 +35,5 @@ promptTouchID('To get consent for a Security-Gated Thing', (err) => {
   }
 })
 ```
+
+**NOTE:** This API will have no effect on macOS systems older than Sierra 10.12.2.
