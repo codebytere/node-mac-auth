@@ -1,2 +1,22 @@
-module.exports = require('bindings')('auth.node')
+const auth = require('bindings')('auth.node')
+
+function promptTouchID(options, callback) {
+  // Parse and sanitize options object
+  if (!options) throw new Error('Options object is required.')
+  else if (!options.hasOwnProperty('reason')) throw new Error('Reason parameter is required.')
+  else if (typeof options.reason !== 'string') throw new Error('Reason must be a string.')
+
+  // Ensure callback was passed and is a function
+  if (typeof callback !== 'function') {
+    throw new TypeError('Callback function is required.')
+  }
+
+  auth.promptTouchID.call(this, options, callback)
+}
+
+
+module.exports = {
+  canPromptTouchID: auth.canPromptTouchID,
+  promptTouchID
+}
 

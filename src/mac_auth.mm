@@ -21,19 +21,9 @@ NAN_METHOD(CanPromptTouchID) {
 
 NAN_METHOD(PromptTouchID) {
   Nan::HandleScope scope;
-  if (info[0]->IsUndefined()) {
-    Nan::ThrowError("Options are required.");
-    return;
-  }
 
   v8::Local<v8::Object> options = info[0].As<v8::Object>();
   Nan::Utf8String *reason_utf8 = StringFromObject(options, "reason");
-
-  if (info[1]->IsUndefined()) {
-    Nan::ThrowError("Callback is required.");
-    return;
-  }
-
   Nan::Callback *callback = new Nan::Callback(info[1].As<v8::Function>());
 
   if (@available(macOS 10.12.2, *)) {
@@ -50,26 +40,26 @@ NAN_METHOD(PromptTouchID) {
               localizedReason:reason
               reply:^(BOOL success, NSError* error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
+                  v8::Local<v8::Value> argv[1];
                   if (!success) {
                     const char *err_str = [error.localizedDescription UTF8String];
                     auto err = v8::String::NewFromUtf8(isolate, err_str);
-                    v8::Local<v8::Value> argv[] = { Nan::Error(err) };
-                    callback->Call(1, argv);
+                    argv[0] = Nan::Error(err);
                   } else {
-                    v8::Local<v8::Value> argv[] = { Nan::Null() };
-                    callback->Call(1, argv);
+                    argv[0] = Nan::Null();
                   }
+                  callback->Call(1, argv);
                 });
               }];
   }
 }
 
-Nan::Utf8String* StringFromObject(v8::Local<v8::Object> object, const char *key) {
+Nan::Utf8String* StringFromObject(v8::Local<v8::Object> object, const char* key) {
   v8::Local<v8::String> key_handle = Nan::New(key).ToLocalChecked();
   v8::MaybeLocal<v8::Value> handle = Nan::Get(object, key_handle);
 
   if (handle.IsEmpty() || Nan::Equals(handle.ToLocalChecked(), Nan::Undefined()).FromJust()) {
-    Nan::ThrowError("Invalid parameter: " + key);
+    Nan::ThrowTypeError("Invalid parameter.");
     return nullptr;
   }
 
