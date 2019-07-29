@@ -1,0 +1,34 @@
+{
+  "name": "mac-auth",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install": "node-gyp rebuild",
+    "build": "node-gyp build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codebytere/node-mac-auth.git"
+  },
+  "keywords": [
+    "auth",
+    "touchid",
+    "mac",
+    "electron",
+    "nodejs"
+  ],
+  "author": "Shelley Vohr (@codebytere)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/codebytere/node-mac-auth/issues"
+  },
+  "homepage": "https://github.com/codebytere/node-mac-auth#readme",
+  "dependencies": {
+    "bindings": "^1.5.0"
+  },
+  "devDependencies": {
+    "nan": "^2.14.0",
+    "node-gyp": "^5.0.3"
+  }
+}
