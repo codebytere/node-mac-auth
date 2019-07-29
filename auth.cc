@@ -3,8 +3,17 @@
 #include "src/mac_auth.h"
 
 void Init(v8::Local<v8::Object> exports) {
-  exports->Set(Nan::New("canPromptTouchID").ToLocalChecked(),
-               Nan::New<v8::FunctionTemplate>(CanPromptTouchID)->GetFunction());
+  Nan::Set(
+    exports,
+    Nan::New("canPromptTouchID").ToLocalChecked(),
+    Nan::GetFunction(Nan::New<v8::FunctionTemplate>(CanPromptTouchID)).ToLocalChecked()
+  );
+
+  Nan::Set(
+    exports,
+    Nan::New("promptTouchID").ToLocalChecked(),
+    Nan::GetFunction(Nan::New<v8::FunctionTemplate>(PromptTouchID)).ToLocalChecked()
+  );
 }
 
 NODE_MODULE(auth, Init);
