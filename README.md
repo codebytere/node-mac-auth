@@ -2,13 +2,13 @@
 
 A native node module that allows you to query and handle native macOS biometric authentication. 
 
+This module will have no effect unless there's an app bundle to own it: without one the API will simply appear not to run as a corollary of the way macOS handles native UI APIs.
+
 ## API
 
 ### `canPromptTouchID()`
 
 Returns `Boolean` - whether or not this device has the ability to use Touch ID.
-
-**NOTE:** This API will return `false` on macOS systems older than Sierra 10.12.2.
 
 ```js
 const { canPromptTouchID } = require('node-mac-auth')
@@ -16,6 +16,8 @@ const { canPromptTouchID } = require('node-mac-auth')
 const canPrompt = canPromptTouchID()
 console.log(`I ${canPrompt ? 'can' : 'cannot'} prompt for TouchID!`)
 ```
+
+**NOTE:** This API will return `false` on macOS systems older than Sierra 10.12.2.
 
 ### `promptTouchID(options, callback)`
 
@@ -37,3 +39,37 @@ promptTouchID({ reason: 'To get consent for a Security-Gated Thing' }, (err) => 
 ```
 
 **NOTE:** This API will have no effect on macOS systems older than Sierra 10.12.2.
+
+## Trying It Out
+
+To see this module in action:
+
+```sh
+$ git clone https://github.com/electron/electron-quick-start
+$ cd electron-quick-start
+$ npm install
+$ npm install node-mac-auth
+```
+
+then open `main.js` inside `electron-quick-start` and add:
+
+```js
+const { canPromptTouchID, promptTouchID } = require('node-mac-auth')
+```
+
+to the top at line 4, and 
+
+```js
+const canPrompt = canPromptTouchID()
+console.log(`I ${canPrompt ? 'can' : 'cannot'} prompt for TouchID!`)
+
+promptTouchID({ reason: 'To get consent for a Security-Gated Thing' }, (err) => {
+  if (err) {
+    console.log('TouchID failed because: ', err)
+  } else {
+    console.log('You have successfully authenticated with Touch ID!')
+  }
+})
+```
+
+Inside the `createWindow` function beginning at line 9. Enjoy!
