@@ -26,6 +26,7 @@ console.log(`I ${canPrompt ? 'can' : 'cannot'} prompt for TouchID!`)
 
 * `options` Object
   * `reason` String - The reason you are asking for Touch ID authentication.
+  * `reuseDuration` Number - The duration for which Touch ID authentication reuse is allowable, in seconds.
 * `callback` Function
   * `error` - The reason authentication failed, if it failed.
 
