@@ -4,7 +4,7 @@ function promptTouchID(options, callback) {
   // Parse and sanitize options object
   if (!options) throw new Error('Options object is required.')
   else if (!options.hasOwnProperty('reason')) throw new Error('Reason parameter is required.')
-  else if (typeof options.reason !== 'string') throw new TypeError('Reason must be a string.')
+  else if (typeof options.reason !== 'string') throw new TypeError('Reason parameter must be a string.')
 
   // reuseDuration is optional
   if (options.hasOwnProperty('reuseDuration') && typeof options.reuseDuration !== 'number') {

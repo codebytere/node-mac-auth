@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "install": "node-gyp rebuild",
-    "build": "node-gyp build"
+    "build": "node-gyp build",
+    "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,8 @@
     "bindings": "^1.5.0"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.2.0",
     "nan": "^2.14.0",
     "node-gyp": "^5.0.3"
   }
