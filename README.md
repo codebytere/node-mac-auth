@@ -1,5 +1,5 @@
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
- [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![GitHub release](https://img.shields.io/github/release/codebytere/node-mac-auth.svg)](https://GitHub.com/codebytere/node-mac-auth/releases/) [![Build Status](https://travis-ci.org/codebytere/node-mac-auth.svg?branch=master)](https://travis-ci.org/codebytere/node-mac-auth)
+ [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![GitHub release](https://img.shields.io/github/release/codebytere/node-mac-auth.svg)](https://GitHub.com/codebytere/node-mac-auth/releases/) [![Actions Status](https://github.com/codebytere/node-mac-auth/workflows/Test/badge.svg)](https://github.com/codebytere/node-mac-auth/actions)
 
 # node-mac-auth
 
