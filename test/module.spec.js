@@ -31,17 +31,14 @@ describe('node-mac-auth', () => {
         promptTouchID({ reason: 1 })
       }).to.throw(/Reason parameter must be a string./)
     })
-
-    it('should throw if no callback is passed', () => {
-      expect(() => {
-        promptTouchID({ reason: 'i want to' })
-      }).to.throw(/Callback function is required./)
-    })
     
     it('should not throw if no reuseDuration is passed', () => {
       expect(() => {
         promptTouchID({ reason: 'i want to' }, () => {})
       }).to.not.throw()
+
+      // Quit after test passes, or it will hang on system prompt.
+      process.exit(0)
     })
   })
 })
