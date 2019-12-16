@@ -1,6 +1,6 @@
 {
   "name": "node-mac-auth",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Query and handle native macOS biometric authentication.",
   "main": "index.js",
   "scripts": {
