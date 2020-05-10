@@ -41,11 +41,11 @@ Napi::Promise PromptTouchID(const Napi::CallbackInfo &info) {
     reuse_duration = data.Get("reuseDuration").As<Napi::Number>().Int32Value();
 
   Napi::Promise::Deferred deferred = Napi::Promise::Deferred::New(env);
-  Napi::ThreadSafeFunction ts_fn =
-      Napi::ThreadSafeFunction::New(env, Napi::Function::New(env, NoOp),
-                                    "authCallback", 0, 1, [](Napi::Env) {});
+  Napi::ThreadSafeFunction ts_fn = Napi::ThreadSafeFunction::New(
+      env, Napi::Function::New(env, NoOp), "authCallback", 0, 1);
 
   if (@available(macOS 10.12.2, *)) {
+
     LAContext *context = [[LAContext alloc] init];
 
     // The app-provided reason for requesting authentication
@@ -59,6 +59,7 @@ Napi::Promise PromptTouchID(const Napi::CallbackInfo &info) {
     if (reuse_duration > 0)
       [context setTouchIDAuthenticationAllowableReuseDuration:reuse_duration];
 
+    __block Napi::ThreadSafeFunction tsfn = ts_fn;
     [context
          evaluatePolicy:policy
         localizedReason:request_reason
@@ -75,14 +76,18 @@ Napi::Promise PromptTouchID(const Napi::CallbackInfo &info) {
                       deferred.Reject(Napi::String::New(env, error));
                     };
 
-                    if (error != nullptr) {
+                    if (error) {
                       const char *err_str =
                           [error.localizedDescription UTF8String];
-                      ts_fn.BlockingCall(err_str, reject_cb);
+                      tsfn.BlockingCall(err_str, reject_cb);
                     } else {
-                      ts_fn.BlockingCall(resolve_cb);
+                      tsfn.BlockingCall(resolve_cb);
                     };
+                    tsfn.Release();
                   }];
+  } else {
+    ts_fn.Release();
+    deferred.Resolve(env.Null());
   }
 
   return deferred.Promise();
