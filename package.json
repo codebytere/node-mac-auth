@@ -28,12 +28,12 @@
   "homepage": "https://github.com/codebytere/node-mac-auth#readme",
   "dependencies": {
     "bindings": "^1.5.0",
-    "node-addon-api": "^3.0.2"
+    "node-addon-api": "^7.1.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "clang-format": "^1.4.0",
-    "mocha": "^8.1.3",
-    "node-gyp": "^9.4.0"
+    "clang-format": "^1.8.0",
+    "mocha": "^10.3.0",
+    "node-gyp": "^10.0.1"
   }
 }
