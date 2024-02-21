@@ -1,19 +1,26 @@
 name: Test
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
 
 jobs:
   build:
-
-    runs-on: macOS-latest
-
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: Use Node.js 10.x
-      uses: actions/setup-node@v1
+    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11  # tag: v4.1.1
+    - name: Setup Node.js
+      uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8  # tag: v4.0.1
       with:
-        version: 10.x
-    - name: npm install, build, and test
+        node-version: lts/-1
+    - name: Run Tests
       run: |
-        npm install
+        npm ci
         npm test
