@@ -20,5 +20,5 @@ function promptTouchID(options, callback) {
 
 module.exports = {
   canPromptTouchID: auth.canPromptTouchID,
-  promptTouchID
+  promptTouchID,
 }

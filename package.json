@@ -4,10 +4,12 @@
   "description": "Query and handle native macOS biometric authentication.",
   "main": "index.js",
   "scripts": {
-    "build": "node-gyp build",
-    "format": "clang-format -i auth.mm",
-    "install": "node-gyp rebuild",
-    "test": "./node_modules/.bin/mocha --reporter spec"
+    "build": "node-gyp rebuild",
+    "clean": "node-gyp clean",
+    "lint": "clang-format --dry-run -Werror auth.mm && prettier --check index.js",
+    "format": "clang-format -i auth.mm && prettier --write index.js",
+    "test": "./node_modules/.bin/mocha --reporter spec",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -33,7 +35,21 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "clang-format": "^1.8.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.5",
     "mocha": "^10.3.0",
-    "node-gyp": "^10.0.1"
-  }
+    "node-gyp": "^10.0.1",
+    "prettier": "^3.3.0"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write"
+    ],
+    "*.mm": [
+      "clang-format -i"
+    ]
+  },
+  "os": [
+    "darwin"
+  ]
 }
