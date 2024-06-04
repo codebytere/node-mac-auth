@@ -44,51 +44,44 @@ Napi::Promise PromptTouchID(const Napi::CallbackInfo &info) {
   Napi::ThreadSafeFunction ts_fn = Napi::ThreadSafeFunction::New(
       env, Napi::Function::New(env, NoOp), "authCallback", 0, 1);
 
-  if (@available(macOS 10.12.2, *)) {
+  LAContext *context = [[LAContext alloc] init];
 
-    LAContext *context = [[LAContext alloc] init];
+  // The app-provided reason for requesting authentication
+  NSString *request_reason = [NSString stringWithUTF8String:reason.c_str()];
 
-    // The app-provided reason for requesting authentication
-    NSString *request_reason = [NSString stringWithUTF8String:reason.c_str()];
+  // Authenticate with biometry.
+  LAPolicy policy = LAPolicyDeviceOwnerAuthenticationWithBiometrics;
 
-    // Authenticate with biometry.
-    LAPolicy policy = LAPolicyDeviceOwnerAuthenticationWithBiometrics;
+  // Optionally set the duration for which Touch ID authentication reuse is
+  // allowable
+  if (reuse_duration > 0)
+    [context setTouchIDAuthenticationAllowableReuseDuration:reuse_duration];
 
-    // Optionally set the duration for which Touch ID authentication reuse is
-    // allowable
-    if (reuse_duration > 0)
-      [context setTouchIDAuthenticationAllowableReuseDuration:reuse_duration];
+  __block Napi::ThreadSafeFunction tsfn = ts_fn;
+  [context
+       evaluatePolicy:policy
+      localizedReason:request_reason
+                reply:^(BOOL success, NSError *error) {
+                  // Promise resolution callback
+                  auto resolve_cb = [=](Napi::Env env, Napi::Function noop_cb) {
+                    deferred.Resolve(env.Null());
+                  };
 
-    __block Napi::ThreadSafeFunction tsfn = ts_fn;
-    [context
-         evaluatePolicy:policy
-        localizedReason:request_reason
-                  reply:^(BOOL success, NSError *error) {
-                    // Promise resolution callback
-                    auto resolve_cb = [=](Napi::Env env,
-                                          Napi::Function noop_cb) {
-                      deferred.Resolve(env.Null());
-                    };
+                  // Promise rejection callback
+                  auto reject_cb = [=](Napi::Env env, Napi::Function noop_cb,
+                                       const char *error) {
+                    deferred.Reject(Napi::String::New(env, error));
+                  };
 
-                    // Promise rejection callback
-                    auto reject_cb = [=](Napi::Env env, Napi::Function noop_cb,
-                                         const char *error) {
-                      deferred.Reject(Napi::String::New(env, error));
-                    };
-
-                    if (error) {
-                      const char *err_str =
-                          [error.localizedDescription UTF8String];
-                      tsfn.BlockingCall(err_str, reject_cb);
-                    } else {
-                      tsfn.BlockingCall(resolve_cb);
-                    };
-                    tsfn.Release();
-                  }];
-  } else {
-    ts_fn.Release();
-    deferred.Resolve(env.Null());
-  }
+                  if (error) {
+                    const char *err_str =
+                        [error.localizedDescription UTF8String];
+                    tsfn.BlockingCall(err_str, reject_cb);
+                  } else {
+                    tsfn.BlockingCall(resolve_cb);
+                  };
+                  tsfn.Release();
+                }];
 
   return deferred.Promise();
 }

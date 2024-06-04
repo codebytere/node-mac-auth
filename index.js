@@ -1,7 +1,7 @@
 const auth = require('bindings')('auth.node')
 
 function promptTouchID(options) {
-  if (!options) {
+  if (!options || typeof options !== 'object') {
     throw new Error('Options object is required.')
   }
 
