@@ -3,10 +3,10 @@ const auth = require('bindings')('auth.node')
 function promptTouchID(options) {
   if (!options) {
     throw new Error('Options object is required.')
-  } else if (!options.hasOwnProperty('reason')) {
-    throw new Error('Reason parameter is required.')
-  } else if (typeof options.reason !== 'string') {
-    throw new TypeError('Reason parameter must be a string.')
+  }
+
+  if (!options.hasOwnProperty('reason') || typeof options.reason !== 'string') {
+    throw new Error('Reason parameter must be a string.')
   }
 
   if (options.hasOwnProperty('reuseDuration') && typeof options.reuseDuration !== 'number') {
