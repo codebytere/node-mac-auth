@@ -28,9 +28,9 @@ console.log(`I ${canPrompt ? 'can' : 'cannot'} prompt for TouchID!`)
 
 * `options` Object
   * `reason` String - The reason you are asking for Touch ID authentication.
-  * `reuseDuration` Number - The duration for which Touch ID authentication reuse is allowable, in seconds.
+  * `reuseDuration` Number (optional) - The duration for which Touch ID authentication reuse is allowable, in seconds.
 
-Returns `Promise<void>`. 
+Returns `Promise<void>` - resolves when Touch ID authenticates successfully.
 
 ```js
 const { promptTouchID } = require('node-mac-auth')
@@ -41,8 +41,6 @@ promptTouchID({ reason: 'To get consent for a Security-Gated Thing' }).then(() =
   console.log('TouchID failed because: ', err)
 })
 ```
-
-**NOTE:** This API will have no effect on macOS systems older than Sierra 10.12.2.
 
 ## Trying It Out
 
