@@ -1,6 +1,6 @@
 const auth = require('bindings')('auth.node')
 
-function promptTouchID(options, callback) {
+function promptTouchID(options) {
   // Parse and sanitize options object
   if (!options) {
     throw new Error('Options object is required.')
